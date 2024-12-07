@@ -65,14 +65,20 @@ export default function Home() {
 
     <>
       <>
+      <style
+  dangerouslySetInnerHTML={{
+    __html: "\n    body{\n    background: black !important;\n}\n\n"
+  }}
+/>
+
         {/* TW Elements is free under AGPL, with commercial license required for specific uses. See more details: https://tw-elements.com/license/ and contact us for queries at tailwind@mdbootstrap.com */}
-        <section className="h-screen container">
+        <section className="h-screen container" style={{ backgroundColor: "#000" }}>
           <div className="h-full">
             {/* Left column container with background*/}
             <div className="g-6 flex h-full flex-wrap items-center justify-center lg:justify-between">
               <div className="shrink-1 mb-12 grow-0 basis-auto md:mb-0 md:w-9/12 md:shrink-0 lg:w-6/12 xl:w-6/12" id="contentMob">
                 <img
-                  src="https://ucarecdn.com/13ff6806-3fbb-48c9-832b-c8a76aaedf2b/logo.png"
+                  src="https://ucarecdn.com/f4020f98-be3d-4d27-b301-7df5bf18ee96/logo.png"
                   className="w-50"
                   alt="Sample image"
                 />
@@ -81,7 +87,7 @@ export default function Home() {
                 <form onSubmit={handleSubmit}>
 
                   <div className="my-4 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-neutral-300 after:mt-0.5 after:flex-1 after:border-t after:border-neutral-300">
-                    <p className="mx-4 mb-0 text-center font-semibold dark:text-white">
+                    <p className="mx-4 mb-0 text-center font-semibold  text-white">
                       Login
                     </p>
                   </div>

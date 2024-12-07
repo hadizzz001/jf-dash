@@ -90,14 +90,42 @@ const Post = ({ post }) => {
 
   const getOptionsForSecondSelect = (firstSelectValue) => {
     switch (firstSelectValue) {
-      case 'Appliances':
-        return ['--Choose Type--', 'Home Appliances', 'Outdoor Appliances', 'Office Appliances', 'Miscellaneous Appliances'];
-      case 'Fashion':
-        return ['--Choose Type--', 'Men Wear', 'Women Wear', 'Baby Wear'];
-      case 'Household':
-        return ['--Choose Type--', 'Furniture', 'Home Supplies'];
-      case 'Picnic Items':
-        return ['--Choose Type--', 'Picnic Supplies'];
+      case 'Products':
+        return [
+          '--Choose Type--',
+          'Shawarma Machines',
+          'Shawarma Knife & Meat Slicers',
+          'Pita Oven',
+          'Hummus Blender',
+          'Saj Machine',
+          'Kebab Char Broilers & Griddles',
+          'Falafel & Meat Grinder',
+          'Dough Mixers & Rollers',
+          'Automatic Salad Bar Chopper',
+          'Gas Ranges',
+          'Salad Bar Refrigeration & Food Warmers',
+          'Kunafet',
+          'Gelato & Middle Eastern Booza',
+          'Coffee & Espresso Machines',
+          'Accessories',
+          'Shawarma Meat Slicer',
+          'Rotisserie Chicken',
+          'Fryers',
+          'Automatic Kebab Encrusted',
+          'Used & Refurbished'
+        ];
+      case 'Parts':
+        return [
+          '--Choose Type--',
+          'Shawarma Machine Parts',
+          'Hummus Machine Parts',
+          'Electric Shawarma Knives',
+          'Pita Oven Parts',
+          'Saj Machine Parts',
+          'Falafel Maker Parts',
+          'Mixer Parts',
+          'Divider Parts'
+        ];
       default:
         return [];
     }
@@ -149,8 +177,7 @@ const Post = ({ post }) => {
     <div className="bg-slate-200 p-3 min-h-full min-w-full" key={post.id}>
       <h1 className="text-2xl font-bold">Title : {post.title}</h1>
       <b>Category : {post.category}</b><br />
-      <b>Type : {post.type}</b><br />
-      <b>Price($) : {post.price}</b><br />
+      <b>Type : {post.type}</b><br /> 
       <p style={{ width: "150px", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{post.description}</p><br />
 
       <img src={post.img[0]} width={50} />
@@ -188,25 +215,13 @@ const Post = ({ post }) => {
               onChange={handleChange}
               required
             />
-
-            <input
-              type="text"
-              placeholder="Price"
-              name="price"
-              className="w-full p-2 my-3"
-              value={postToEdit.price || value1}
-              onChange={handleChange}
-              required
-            />
-
+ 
 
 
 <select name="category" value={firstSelectValue} onChange={handleFirstSelectChange} style={{ width: "100%", height: "40px" }}  >
               <option value="0" selected>--Choose Category--</option>
-              <option value="Appliances">Appliances</option>
-              <option value="Fashion">Fashion</option>
-              <option value="Household">Household</option>
-              <option value="Picnic Items">Picnic Items</option>
+              <option value="Products">Products</option>
+              <option value="Parts">Parts</option> 
             </select>
 
             <br />
