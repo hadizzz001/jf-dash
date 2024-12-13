@@ -56,6 +56,14 @@
         "async": false
       }
     },
+    "(app-client)/./app/page.tsx": {
+      "*": {
+        "id": "(sc_client)/./app/page.tsx",
+        "name": "*",
+        "chunks": [],
+        "async": false
+      }
+    },
     "(app-client)/./app/dashboard/layout.tsx": {
       "*": {
         "id": "(sc_client)/./app/dashboard/layout.tsx",
@@ -251,6 +259,14 @@
       ],
       "async": false
     },
+    "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\page.tsx": {
+      "id": "(app-client)/./app/page.tsx",
+      "name": "*",
+      "chunks": [
+        "app/page:static/chunks/app/page.js"
+      ],
+      "async": false
+    },
     "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\dashboard\\layout.tsx": {
       "id": "(app-client)/./app/dashboard/layout.tsx",
       "name": "*",
@@ -293,10 +309,6 @@
     }
   },
   "entryCSSFiles": {
-    "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\dashboard\\layout": {
-      "modules": [],
-      "files": []
-    },
     "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\layout": {
       "modules": [
         "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\globals.css",
@@ -306,6 +318,14 @@
       "files": [
         "static/css/app/layout.css"
       ]
+    },
+    "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\page": {
+      "modules": [],
+      "files": []
+    },
+    "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\dashboard\\layout": {
+      "modules": [],
+      "files": []
     },
     "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\dashboard\\page": {
       "modules": [
