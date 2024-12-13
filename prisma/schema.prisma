@@ -17,6 +17,8 @@ model Post {
   img String[] 
   category String
   type String
+  price String
+  stock String
 }
 
 

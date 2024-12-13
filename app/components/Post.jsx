@@ -174,112 +174,93 @@ const Post = ({ post }) => {
 
 
   return (
-    <div className="bg-slate-200 p-3 min-h-full min-w-full" key={post.id}>
-      <h1 className="text-2xl font-bold">Title : {post.title}</h1>
-      <b>Category : {post.category}</b><br />
-      <b>Type : {post.type}</b><br /> 
-      <p style={{ width: "150px", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{post.description}</p><br />
+<div className="bg-slate-200 p-3 min-h-full min-w-full flex items-center justify-between" key={post.id}> 
+  <h1 className="text-2xl font-bold w-1/6">{post.title}</h1>
+  <div className="w-1/6">
+    <b>Category: {post.category}</b><br />
+    <b>Type: {post.type}</b><br />
+  </div>
+  <p className="w-1/3 overflow-hidden whitespace-nowrap text-ellipsis">{post.description}</p>
+  <img src={post.img[0]} width={50} className="w-1/12" />
+  
+  <div className="flex space-x-3">
+    <button
+      className="text-blue-700"
+      onClick={() => setOpenModalEdit(true)}
+    >
+      Edit
+    </button>
+    <button
+      className="text-red-700"
+      onClick={() => setOpenModalDelete(true)}
+    >
+      Delete
+    </button>
+  </div>
 
-      <img src={post.img[0]} width={50} />
+  {/* Edit Modal */}
+  <Modal modalOpen={openModalEdit} setModalOpen={setOpenModalEdit}>
+    <form className="w-full mt-3" onSubmit={handleEditSubmit}>
+      <input
+        type="text"
+        placeholder="Title"
+        name="title"
+        className="w-full p-2"
+        value={postToEdit.title || ""}
+        onChange={handleChange}
+        required
+      />
+      <textarea
+        placeholder="Description"
+        name="description"
+        className="w-full p-2 my-3"
+        value={postToEdit.description || ""}
+        onChange={handleChange}
+        required
+      />
+      <select name="category" value={firstSelectValue} onChange={handleFirstSelectChange} className="w-full h-10">
+        <option value="0">--Choose Category--</option>
+        <option value="Products">Products</option>
+        <option value="Parts">Parts</option>
+      </select>
+      {active1 && (
+        <select value={secondSelectValue} onChange={(event) => setSecondSelectValue(event.target.value)} className="w-full h-10 mt-3">
+          {secondSelectOptions.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      )}
+      <Dropzone HandleImagesChange={handleImgChange} className='mt-10 border border-neutral-200 p-16' />
+      <button type="submit" className="px-5 py-2 mt-3" style={{ background: "#ab695d" }} disabled={active}>
+        Submit
+      </button>
+    </form>
+  </Modal>
 
-      <div className="pt-5">
-        <button
-          className="text-blue-700 mr-3"
-          onClick={() => setOpenModalEdit(true)}
-        >
-          Edit
-        </button>
-
-
-        <Modal modalOpen={openModalEdit} setModalOpen={setOpenModalEdit}>
-
-
-
-          <form className="w-full mt-3" onSubmit={handleEditSubmit}>
-
-            <input
-              type="text"
-              placeholder="Title"
-              name="title"
-              className="w-full p-2"
-              value={postToEdit.title || ""}
-              onChange={handleChange}
-              required
-            />
-
-            <textarea
-              placeholder="Description"
-              name="description"
-              className="w-full p-2 my-3"
-              value={postToEdit.description || ""}
-              onChange={handleChange}
-              required
-            />
- 
-
-
-<select name="category" value={firstSelectValue} onChange={handleFirstSelectChange} style={{ width: "100%", height: "40px" }}  >
-              <option value="0" selected>--Choose Category--</option>
-              <option value="Products">Products</option>
-              <option value="Parts">Parts</option> 
-            </select>
-
-            <br />
-
-
-            {active1 && ( 
-              <select value={secondSelectValue} onChange={(event) => setSecondSelectValue(event.target.value)} style={{ width: "100%", height: "40px" }} className="mt-3">
-                {secondSelectOptions.map((option) => (
-                  <option
-                    key={option}
-                    value={option}
-                  >
-                    {option}
-                  </option>
-                ))}
-              </select>
-            )}
-
-            <Dropzone HandleImagesChange={handleImgChange} className='mt-10 border border-neutral-200 p-16' />
-
-
-            <button type="submit" className="px-5 py-2 mt-3" style={{ background: "#ab695d" }} disabled={active}>
-              Submit
-            </button>
-          </form>
-        </Modal>
-
-        <button onClick={() => setOpenModalDelete(true)} className="text-red-700 mr-3">Delete</button>
-
-        <Modal modalOpen={openModalDelete} setModalOpen={setOpenModalDelete}>
-          <h1 className="text-2xl pb-3">
-            Are you sure, You want to delete this post?
-          </h1>
-
-          <div>
-            <button
-              onClick={() => handleDeletePost(post.id)}
-              className="text-blue-700 font-bold mr-5"
-            >
-              YES
-            </button>
-            <button
-              onClick={() => setOpenModalDelete(false)}
-              className="text-red-700 font-bold mr-5"
-            >
-              No
-            </button>
-          </div>
-        </Modal>
-
-
-
-
-
-
-
-      </div>
+  {/* Delete Modal */}
+  <Modal modalOpen={openModalDelete} setModalOpen={setOpenModalDelete}>
+    <h1 className="text-2xl pb-3">
+      Are you sure, You want to delete this post?
+    </h1>
+    <div>
+      <button
+        onClick={() => handleDeletePost(post.id)}
+        className="text-blue-700 font-bold mr-5"
+      >
+        YES
+      </button>
+      <button
+        onClick={() => setOpenModalDelete(false)}
+        className="text-red-700 font-bold mr-5"
+      >
+        No
+      </button>
     </div>
+  </Modal>
+</div>
+
   );
 };
 
