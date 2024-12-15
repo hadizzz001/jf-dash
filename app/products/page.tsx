@@ -17,7 +17,7 @@ export default function AddProduct() {
   const [price, setPrice] = useState('');
   const [stock, setStock] = useState('');
   const [videoLink, setVideoLink] = useState('');
-    const [img, setImg] = useState([''])
+  const [img, setImg] = useState([''])
 
   const handleAddRow = () => {
     setSpecifications([...specifications, { name: '', value: '' }]);
@@ -30,7 +30,7 @@ export default function AddProduct() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
 
     const payload = {
       title,
@@ -43,7 +43,7 @@ export default function AddProduct() {
       stock,
       videoLink,
       img
-    }; 
+    };
 
     const response = await fetch('/api/products', {
       method: 'POST',
@@ -53,7 +53,7 @@ export default function AddProduct() {
 
     if (response.ok) {
       alert('Product added successfully!');
-      window.location.href = '/dashboard'; 
+      window.location.href = '/dashboard';
     } else {
       alert('Failed to add product');
     }
@@ -67,11 +67,11 @@ export default function AddProduct() {
   }
 
 
-  
-  
 
 
- 
+
+
+
 
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl mx-auto p-4">
@@ -142,15 +142,15 @@ export default function AddProduct() {
         placeholder="Write your product description here..."
       />
 
-<style
-  dangerouslySetInnerHTML={{
-    __html:
-      "\n  .uploadcare--widget {\n    background:black;\n  }\n  "
-  }}
-/>
+      <style
+        dangerouslySetInnerHTML={{
+          __html:
+            "\n  .uploadcare--widget {\n    background:black;\n  }\n  "
+        }}
+      />
 
 
-<Dropzone HandleImagesChange={handleImgChange}  />
+      <Dropzone HandleImagesChange={handleImgChange} />
       <h2 className="text-lg font-bold mb-2">Specifications</h2>
       {specifications.map((spec, index) => (
         <div key={index} className="flex gap-4 mb-2">
@@ -175,7 +175,7 @@ export default function AddProduct() {
       <button
         type="button"
         onClick={handleAddRow}
-        style={{fontSize:"20px"}}
+        style={{ fontSize: "20px" }}
         className="bg-blue-500 text-white px-3 py-1 mb-4 flex "
       >
         +

@@ -54,6 +54,11 @@ export default function RootLayout({
                 </a>
               </li>
               <li className="nav-item">
+                <a href="/category" className="nav-link text-white">
+                  Add new Category
+                </a>
+              </li>
+              <li className="nav-item">
                 <a href="/" className="nav-link text-white">
                   logout
                 </a>

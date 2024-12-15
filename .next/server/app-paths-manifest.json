@@ -1,6 +1,4 @@
 {
-  "/products/page": "app/products/page.js",
-  "/api/products/route": "app/api/products/route.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/api/auth/me/route": "app/api/auth/me/route.js"
+  "/category/page": "app/category/page.js",
+  "/api/category/route": "app/api/category/route.js"
 }

@@ -18,6 +18,8 @@ model Product {
   stock          String
   videoLink      String
   img            String[]
+  category       String
+  type           String
   specifications Specification[]
   createdAt      DateTime        @default(now())
 }
@@ -28,4 +30,11 @@ model Specification {
   productId String  @db.ObjectId
   name      String
   value     String
+}
+
+model Category {
+  id   String   @id @default(auto()) @map("_id") @db.ObjectId
+  name String   @unique
+  type String
+  img  String[]
 }
