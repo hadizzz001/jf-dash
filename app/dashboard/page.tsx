@@ -1,338 +1,263 @@
-"use client"
+'use client';
 
- 
-import { useState, useEffect } from "react";
-import AddPost from "./../components/AddPost";
-import { fetchTemp } from "./../utils";
-import axios from "axios";
-import Modal from "../components/Modal";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import * as XLSX from "xlsx";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { useState, useEffect } from 'react';
 
-const Dashboard = () => {
-  const [allTemp, setTemp] = useState([]);
-  const [filteredTemp, setFilteredTemp] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [active, setActive] = useState(false);
-  const [selectedPost, setSelectedPost] = useState(null);
-  const [openModalEdit, setOpenModalEdit] = useState(false);
-  const [openModalDelete, setOpenModalDelete] = useState(false);
+export default function ProductTable() {
+  const [products, setProducts] = useState([]);
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const fetchData = async () => {
-    const data = await fetchTemp();
-    setTemp(data);
-    setFilteredTemp(data); // Initialize filtered data
-  };
-
+  // Fetch products on load
   useEffect(() => {
-    fetchData();
+    fetchProducts();
   }, []);
 
-  const handleSearch = (e) => {
-    const query = e.target.value.toLowerCase();
-    setSearchQuery(query);
-
-    // Filter posts by title
-    const filtered = allTemp.filter((item) =>
-      item.title.toLowerCase().includes(query)
-    );
-    setFilteredTemp(filtered);
+  const fetchProducts = async () => {
+    const response = await fetch('/api/products');
+    if (response.ok) {
+      const data = await response.json();
+      setProducts(data);
+    } else {
+      console.error('Failed to fetch products');
+    }
   };
 
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
-    setActive(true);
+  const handleDelete = async (id) => {
+    if (confirm('Are you sure you want to delete this product?')) {
+      try {
+        const response = await fetch(`/api/products/${id}`, {
+          method: 'DELETE',
+        });
+        if (response.ok) {
+          alert('Product deleted successfully');
+          fetchProducts();
+        } else {
+          console.error('Failed to delete product');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+  };
 
+  const handleEdit = (product) => {
+    setEditingProduct(product);
+  };
+
+  const handleUpdate = async (updatedProduct) => {
     try {
-      await axios.patch(`/api/posts/${selectedPost.id}`, selectedPost);
-      setOpenModalEdit(false);
-      fetchData(); // Refresh the data after editing
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setActive(false);
+      const response = await fetch(`/api/products/${updatedProduct.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedProduct),
+      });
+
+      if (response.ok) {
+        alert('Product updated successfully');
+        setEditingProduct(null);
+        fetchProducts();
+      } else {
+        console.error('Failed to update product');
+      }
+    } catch (error) {
+      console.error('Error:', error);
     }
   };
 
-  const handleDeletePost = async (id) => {
-    try {
-      await axios.delete(`/api/posts/${id}`);
-      setOpenModalDelete(false);
-      fetchData(); // Refresh the data after deleting
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const exportToExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(filteredTemp);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Posts");
-    XLSX.writeFile(workbook, "posts_data.xlsx");
-  };
-
-  // Function to return category-specific types
-  const getCategoryTypes = (category) => {
-    switch (category) {
-      case "Products":
-        return [
-          "--Choose Type--",
-          "Shawarma Machines",
-          "Shawarma Knife & Meat Slicers",
-          "Pita Oven",
-          "Hummus Blender",
-          "Saj Machine",
-          "Kebab Char Broilers & Griddles",
-          "Falafel & Meat Grinder",
-          "Dough Mixers & Rollers",
-          "Automatic Salad Bar Chopper",
-          "Gas Ranges",
-          "Salad Bar Refrigeration & Food Warmers",
-          "Kunafet",
-          "Gelato & Middle Eastern Booza",
-          "Coffee & Espresso Machines",
-          "Accessories",
-          "Shawarma Meat Slicer",
-          "Rotisserie Chicken",
-          "Fryers",
-          "Automatic Kebab Encrusted",
-          "Used & Refurbished",
-        ];
-      case "Parts":
-        return [
-          "--Choose Type--",
-          "Shawarma Machine Parts",
-          "Hummus Machine Parts",
-          "Electric Shawarma Knives",
-          "Pita Oven Parts",
-          "Saj Machine Parts",
-          "Falafel Maker Parts",
-          "Mixer Parts",
-          "Divider Parts",
-        ];
-      default:
-        return ["--Choose Type--"];
-    }
-  };
+  // Filter products based on the search query
+  const filteredProducts = products.filter((product) =>
+    product.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
-    <div className="max-w-4xl mx-auto mt-4">
-      <div className="my-5 flex items-center">
-        <h1 className="text-3xl font-bold mr-4">Admin Dashboard</h1>
-        <AddPost />
-        <button
-          onClick={exportToExcel}
-          className="text-white p-3 cursor-pointer ml-4"
-          style={{ background: "#ab695d" }}
-        >
-          Export to Excel
-        </button>
-      </div>
+    <div className="max-w-6xl mx-auto p-4">
+      {editingProduct && (
+        <EditProductForm
+          product={editingProduct}
+          onCancel={() => setEditingProduct(null)}
+          onSave={handleUpdate}
+        />
+      )}
+      <h1 className="text-2xl font-bold mb-4">Product List</h1>
 
-      {/* Search Input */}
+      {/* Search input */}
       <div className="mb-4">
         <input
           type="text"
-          placeholder="Search by title"
           value={searchQuery}
-          onChange={handleSearch}
-          className="form-control"
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full border p-2"
+          placeholder="Search by title..."
         />
       </div>
 
-      {filteredTemp && filteredTemp.length > 0 ? (
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Image</th>
-              <th>Category</th>
-              <th>Type</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Actions</th>
+      <table className="table-auto w-full border-collapse border border-gray-200 mb-4">
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="border p-2">Title</th>
+            <th className="border p-2">Pic</th>
+            <th className="border p-2">Price (USD)</th>
+            <th className="border p-2">Stock</th>
+            <th className="border p-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredProducts.map((product) => (
+            <tr key={product.id} className="hover:bg-gray-50">
+              <td className="border p-2">{product.title}</td>
+              <td className="border p-2">
+                <img src={product.img[0]} alt="Product Image" className="w-24 h-auto" />
+              </td>
+              <td className="border p-2">{product.price}</td>
+              <td className="border p-2">{product.stock}</td>
+              <td className="border p-2">
+                <button
+                  onClick={() => handleEdit(product)}
+                  className="bg-yellow-500 text-white px-2 py-1 mr-2"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(product.id)}
+                  className="bg-red-500 text-white px-2 py-1"
+                >
+                  Delete
+                </button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {filteredTemp.map((item, index) => (
-              <tr key={index}>
-                <td>{item.title}</td>
-                <td>
-                  <img
-                    src={item.img?.[0] || ""}
-                    alt={item.title}
-                    style={{ width: "100px", height: "auto" }}
-                  />
-                </td>
-                <td>{item.category}</td>
-                <td>{item.type}</td>
-                <td>{item.price}</td>
-                <td>{item.stock}</td>
-                <td className="flex">
-                  <FaEdit
-                    className="text-primary cursor-pointer"
-                    onClick={() => {
-                      setSelectedPost({
-                        ...item,
-                        stock: item.stock.toString(), // Convert stock to string when opening the edit modal
-                      });
-                      setOpenModalEdit(true);
-                    }}
-                  />
-                  <FaTrash
-                    className="text-danger ml-3 cursor-pointer"
-                    onClick={() => {
-                      setSelectedPost(item);
-                      setOpenModalDelete(true);
-                    }}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <div className="home___error-container">
-          <h2 className="text-black text-xl font-bold">
-            {searchQuery ? "No matching results found." : "Loading..."}
-          </h2>
-        </div>
-      )}
-
-      {/* Edit Modal */}
-      <Modal modalOpen={openModalEdit} setModalOpen={setOpenModalEdit}>
-        {selectedPost && (
-          <form className="w-full mt-3" onSubmit={handleEditSubmit}>
-            <input
-              type="text"
-              name="title"
-              value={selectedPost.title || ""}
-              onChange={(e) =>
-                setSelectedPost({ ...selectedPost, title: e.target.value })
-              }
-              className="w-full p-2"
-              placeholder="Title"
-              required
-            />
-            <textarea
-              name="description"
-              value={selectedPost.description || ""}
-              onChange={(e) =>
-                setSelectedPost({ ...selectedPost, description: e.target.value })
-              }
-              className="w-full p-2 my-3"
-              placeholder="Description"
-              required
-            />
-            <select
-              name="category"
-              value={selectedPost.category || ""}
-              onChange={(e) =>
-                setSelectedPost({
-                  ...selectedPost,
-                  category: e.target.value,
-                })
-              }
-              className="w-full p-2"
-            >
-              <option value="0">--Choose Category--</option>
-              <option value="Products">Products</option>
-              <option value="Parts">Parts</option>
-            </select>
-            {/* Dynamically render type options based on category */}
-            <select
-              name="type"
-              value={selectedPost.type || ""}
-              onChange={(e) =>
-                setSelectedPost({ ...selectedPost, type: e.target.value })
-              }
-              className="w-full p-2 my-3"
-            >
-              {getCategoryTypes(selectedPost.category).map((type, index) => (
-                <option key={index} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
-            <input
-              type="text"
-              name="price"
-              value={selectedPost.price || ""}
-              onChange={(e) =>
-                setSelectedPost({ ...selectedPost, price: e.target.value })
-              }
-              className="w-full p-2 my-3"
-              placeholder="Price"
-              required
-            />
-            <div className="mt-3">
-              <label>Stock</label>
-              <div className="flex items-center">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setSelectedPost((prev) => ({
-                      ...prev,
-                      stock: (parseInt(prev.stock || "0", 10) - 1).toString(),
-                    }))
-                  }
-                  className="px-3 py-1 bg-gray-300"
-                >
-                  -
-                </button>
-                <input
-                  type="text"
-                  name="stock"
-                  value={selectedPost.stock || "0"}
-                  onChange={(e) =>
-                    setSelectedPost({ ...selectedPost, stock: e.target.value })
-                  }
-                  className="w-16 text-center mx-2"
-                />
-                <button
-                  type="button"
-                  onClick={() =>
-                    setSelectedPost((prev) => ({
-                      ...prev,
-                      stock: (parseInt(prev.stock || "0", 10) + 1).toString(),
-                    }))
-                  }
-                  className="px-3 py-1 bg-gray-300"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-            <button type="submit" className="w-full mt-4 p-2 bg-blue-500 text-white">
-              {active ? "Saving..." : "Save Changes"}
-            </button>
-          </form>
-        )}
-      </Modal>
-
-      {/* Delete Confirmation Modal */}
-      <Modal modalOpen={openModalDelete} setModalOpen={setOpenModalDelete}>
-        <div className="text-center">
-          <h3>Are you sure you want to delete this post?</h3>
-          <div className="flex justify-center mt-4">
-            <button
-              onClick={() => handleDeletePost(selectedPost.id)}
-              className="bg-red-500 text-white px-4 py-2"
-            >
-              Yes, Delete
-            </button>
-            <button
-              onClick={() => setOpenModalDelete(false)}
-              className="bg-gray-500 text-white px-4 py-2 ml-3"
-            >
-              No, Cancel
-            </button>
-          </div>
-        </div>
-      </Modal>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-};
+}
 
-export default Dashboard;
+function EditProductForm({ product, onCancel, onSave }) {
+  const [title, setTitle] = useState(product.title);
+  const [price, setPrice] = useState(product.price);
+  const [stock, setStock] = useState(product.stock);
+  const [weight, setWeight] = useState(product.weight || '');
+  const [shipping, setShipping] = useState(product.shipping || '');
+  const [sku, setSku] = useState(product.sku || '');
+  const [videoLink, setVideoLink] = useState(product.videoLink || '');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave({
+      ...product,
+      title,
+      price,
+      stock,
+      weight,
+      shipping,
+      sku,
+      videoLink,
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="border p-4 bg-gray-100 rounded">
+      <h2 className="text-xl font-bold mb-4">Edit Product</h2>
+
+      <div className="mb-4">
+        <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
+        <input
+          id="title"
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="w-full border p-2"
+          placeholder="Title"
+          required
+        />
+      </div>
+
+      <div className="mb-4">
+        <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price</label>
+        <input
+          id="price"
+          type="text"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          className="w-full border p-2"
+          placeholder="Price"
+          required
+        />
+      </div>
+
+      <div className="mb-4">
+        <label htmlFor="stock" className="block text-sm font-medium text-gray-700">Stock</label>
+        <input
+          id="stock"
+          type="text"
+          value={stock}
+          onChange={(e) => setStock(e.target.value)}
+          className="w-full border p-2"
+          placeholder="Stock"
+          required
+        />
+      </div>
+
+      <div className="mb-4">
+        <label htmlFor="weight" className="block text-sm font-medium text-gray-700">Weight</label>
+        <input
+          id="weight"
+          type="text"
+          value={weight}
+          onChange={(e) => setWeight(e.target.value)}
+          className="w-full border p-2"
+          placeholder="Weight"
+        />
+      </div>
+
+      <div className="mb-4">
+        <label htmlFor="shipping" className="block text-sm font-medium text-gray-700">Shipping Info</label>
+        <input
+          id="shipping"
+          type="text"
+          value={shipping}
+          onChange={(e) => setShipping(e.target.value)}
+          className="w-full border p-2"
+          placeholder="Shipping Info"
+        />
+      </div>
+
+      <div className="mb-4">
+        <label htmlFor="sku" className="block text-sm font-medium text-gray-700">SKU</label>
+        <input
+          id="sku"
+          type="text"
+          value={sku}
+          onChange={(e) => setSku(e.target.value)}
+          className="w-full border p-2"
+          placeholder="SKU"
+        />
+      </div>
+
+      <div className="mb-4">
+        <label htmlFor="videoLink" className="block text-sm font-medium text-gray-700">Video Link</label>
+        <input
+          id="videoLink"
+          type="text"
+          value={videoLink}
+          onChange={(e) => setVideoLink(e.target.value)}
+          className="w-full border p-2"
+          placeholder="Video Link"
+        />
+      </div>
+
+      <div className="flex gap-2">
+        <button type="submit" className="bg-green-500 text-white px-4 py-2">
+          Save
+        </button>
+        <button
+          type="button"
+          onClick={onCancel}
+          className="bg-gray-500 text-white px-4 py-2"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  );
+}

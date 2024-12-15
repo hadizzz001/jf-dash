@@ -144,6 +144,11 @@ export default function Home() {
 
 
 
+      <style
+  dangerouslySetInnerHTML={{
+    __html: "\n  #sidenavv{\n    display:none;\n  }\n"
+  }}
+/>
 
 
 
