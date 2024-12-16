@@ -5,12 +5,13 @@ const prisma = new PrismaClient();
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { name, type } = body;
+    const { name, type ,img} = body;
 
     const product = await prisma.category.create({
       data: {
         name,
         type,
+        img
       },
     });
 

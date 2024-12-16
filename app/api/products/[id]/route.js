@@ -45,7 +45,12 @@ export async function DELETE(request, { params }) {
   const { id } = params;
 
   try {
-    // Delete product and its related specifications
+    // Delete related specifications
+    await prisma.specification.deleteMany({
+      where: { productId: id },
+    });
+
+    // Delete the product
     await prisma.product.delete({
       where: { id },
     });
@@ -62,3 +67,4 @@ export async function DELETE(request, { params }) {
     );
   }
 }
+

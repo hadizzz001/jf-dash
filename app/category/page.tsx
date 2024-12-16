@@ -2,12 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import Dropzone from '../components/Dropzone'
+import { redirect } from 'next/navigation'; 
+
 
 const AddCategory = () => {
-  const [formData, setFormData] = useState({ name: '', type: 'products' });
+  const [formData, setFormData] = useState({ name: '', type: 'products', img: [] });
   const [message, setMessage] = useState('');
   const [categories, setCategories] = useState([]);
   const [img, setImg] = useState([''])
+ 
 
   // Fetch all categories
   const fetchCategories = async () => {
@@ -30,8 +33,9 @@ const AddCategory = () => {
     fetchCategories();
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => { 
+    
+     
     const res = await fetch('/api/category', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -40,8 +44,9 @@ const AddCategory = () => {
 
     if (res.ok) {
       setMessage('Category added successfully!');
-      setFormData({ name: '', type: 'products' });
-      fetchCategories(); // Refresh the table after adding a category
+      setFormData({ name: '', type: 'products', img: [] });
+      fetchCategories(); // Refresh the table after adding a category 
+      redirect('/category');
     } else {
       const errorData = await res.json();
       setMessage(`Error: ${errorData.error}`);
@@ -57,6 +62,7 @@ const AddCategory = () => {
         if (res.ok) {
           setMessage(`Category "${name}" deleted successfully!`);
           fetchCategories(); // Refresh the table after deletion
+          redirect('/category');
         } else {
           const errorData = await res.json();
           setMessage(`Error: ${errorData.error}`);
@@ -70,10 +76,19 @@ const AddCategory = () => {
 
 
   const handleImgChange = (url) => {
-    if (url) {
-      setImg(url);
+    if (url) { 
+      setImg(url); 
     }
   }
+
+
+  useEffect(() => { 
+    if (!(img.includes(""))){ 
+      setFormData((prevState) => ({ ...prevState, img: img }));
+    } 
+  }, [img])
+
+  
 
   return (
     <div className="container mx-auto p-4">
@@ -86,6 +101,7 @@ const AddCategory = () => {
             className="border p-2 w-full"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            required
           />
         </div>
         <div>

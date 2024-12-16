@@ -50,12 +50,12 @@ export default function RootLayout({
               </li>
               <li className="nav-item">
                 <a href="/products" className="nav-link text-white">
-                  Add new Product
+                  Add Product
                 </a>
               </li>
               <li className="nav-item">
                 <a href="/category" className="nav-link text-white">
-                  Add new Category
+                  Add Category
                 </a>
               </li>
               <li className="nav-item">

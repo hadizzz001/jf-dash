@@ -1,14 +1,14 @@
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
- 
+
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { title, weight, shipping, description, specifications, sku, price, stock, img, videoLink } = body;
+    const { title, weight, shipping, description, specifications, sku, price, stock, img, videoLink, type, category } = body;
 
- 
- 
+
+
 
     const product = await prisma.product.create({
       data: {
@@ -21,6 +21,8 @@ export async function POST(req) {
         stock,
         videoLink,
         img,
+        type,
+        category,
         specifications: {
           create: specifications.map((spec) => ({
             name: spec.name,
