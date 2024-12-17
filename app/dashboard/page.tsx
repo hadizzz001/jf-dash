@@ -69,6 +69,10 @@ export default function ProductTable() {
     product.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+
+  console.log("prod: ",products);
+  
+
   return (
     <div className="max-w-6xl mx-auto p-4">
       {editingProduct && (

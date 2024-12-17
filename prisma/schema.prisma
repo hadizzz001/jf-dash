@@ -20,18 +20,11 @@ model Product {
   img            String[]
   category       String
   type           String
-  specifications Specification[]
+  specifications Json
   createdAt      DateTime        @default(now())
 }
 
-model Specification {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  product   Product @relation(fields: [productId], references: [id])
-  productId String  @db.ObjectId
-  name      String
-  value     String
-}
-
+ 
 model Category {
   id   String   @id @default(auto()) @map("_id") @db.ObjectId
   name String   @unique

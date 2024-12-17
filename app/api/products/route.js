@@ -7,7 +7,7 @@ export async function POST(req) {
     const body = await req.json();
     const { title, weight, shipping, description, specifications, sku, price, stock, img, videoLink, type, category } = body;
 
-console.log("category are: ",category);
+console.log("body are: ",body);
 
 
 
@@ -24,12 +24,7 @@ console.log("category are: ",category);
         img,
         type,
         category,
-        specifications: {
-          create: specifications.map((spec) => ({
-            name: spec.name,
-            value: spec.value,
-          })),
-        },
+        specifications 
       },
     });
 
@@ -49,7 +44,7 @@ console.log("category are: ",category);
 export async function GET(req) {
   try {
     const products = await prisma.product.findMany({
-      include: { specifications: true },
+      
     });
 
     return new Response(JSON.stringify(products), {
