@@ -7,6 +7,7 @@ export async function POST(req) {
     const body = await req.json();
     const { title, weight, shipping, description, specifications, sku, price, stock, img, videoLink, type, category } = body;
 
+console.log("category are: ",category);
 
 
 

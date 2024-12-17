@@ -148,7 +148,7 @@ else {
           Select a category
         </option>
         {categoryOptions.map((category) => (
-          <option key={category.id} value={category.id}>
+          <option key={category.id} value={category.name}>
             {category.name}
           </option>
         ))}

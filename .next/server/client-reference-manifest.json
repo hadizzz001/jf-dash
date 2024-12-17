@@ -80,14 +80,6 @@
         "async": false
       }
     },
-    "(app-client)/./app/category/page.tsx": {
-      "*": {
-        "id": "(sc_client)/./app/category/page.tsx",
-        "name": "*",
-        "chunks": [],
-        "async": false
-      }
-    },
     "(app-client)/./app/products/page.tsx": {
       "*": {
         "id": "(sc_client)/./app/products/page.tsx",
@@ -291,14 +283,6 @@
       ],
       "async": false
     },
-    "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\category\\page.tsx": {
-      "id": "(app-client)/./app/category/page.tsx",
-      "name": "*",
-      "chunks": [
-        "app/category/page:static/chunks/app/category/page.js"
-      ],
-      "async": false
-    },
     "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\products\\page.tsx": {
       "id": "(app-client)/./app/products/page.tsx",
       "name": "*",
@@ -344,10 +328,6 @@
       "files": []
     },
     "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\dashboard\\page": {
-      "modules": [],
-      "files": []
-    },
-    "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\category\\page": {
       "modules": [],
       "files": []
     },
