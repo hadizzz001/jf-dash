@@ -2,91 +2,65 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function POST(req) {
+export async function GET(req) {
   try {
-    const body = await req.json();
-    const { name, type ,img} = body;
-
-    const product = await prisma.category.create({
-      data: {
-        name,
-        type,
-        img
-      },
-    });
-
-    return new Response(
-      JSON.stringify({ message: 'Product created successfully', product }),
-      {
-        status: 201,
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
+    const categories = await prisma.category.findMany();
+    return new Response(JSON.stringify(categories), { status: 200 });
   } catch (error) {
-    console.error('Error creating product:', error);
-    return new Response(JSON.stringify({ error: 'Failed to create product' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    console.error('Error fetching categories:', error);
+    return new Response(JSON.stringify({ error: 'Failed to fetch categories' }), { status: 500 });
   }
 }
 
-export async function GET(req) {
+export async function POST(req) {
   try {
-    const products = await prisma.category.findMany();
-
-    return new Response(JSON.stringify(products), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
+    const { name, type, img } = await req.json();
+    const category = await prisma.category.create({ data: { name, type, img } });
+    return new Response(JSON.stringify({ message: 'Category created successfully', category }), {
+      status: 201,
     });
   } catch (error) {
-    console.error('Error fetching products:', error);
-    return new Response(JSON.stringify({ error: 'Failed to fetch products' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
+    console.error('Error creating category:', error);
+    return new Response(JSON.stringify({ error: 'Failed to create category' }), { status: 500 });
+  }
+}
+
+export async function PATCH(req) {
+
+  try {
+    
+    const url = new URL(req.url);
+    const id = url.searchParams.get('id');
+    if (!id) return new Response(JSON.stringify({ error: 'ID is required' }), { status: 400 });
+ 
+    const { name, type, img } = await req.json(); 
+
+
+    const updatedCategory = await prisma.category.update({
+      where: { id },
+      data: { name, type, img },
     });
+    return new Response(JSON.stringify({ message: 'Category updated successfully', updatedCategory }), {
+      status: 200,
+    });
+  } catch (error) {
+    console.error('Error updating category:', error);
+    return new Response(JSON.stringify({ error: 'Failed to update category' }), { status: 500 });
   }
 }
 
 export async function DELETE(req) {
   try {
     const url = new URL(req.url);
-    const name = url.searchParams.get('name');
+    const id = url.searchParams.get('id');
+    if (!id) return new Response(JSON.stringify({ error: 'ID is required' }), { status: 400 });
 
-    if (!name) {
-      return new Response(
-        JSON.stringify({ error: 'Name parameter is required' }),
-        {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
-    }
-
-    const deletedCategory = await prisma.category.delete({
-      where: {
-        name
-      },
+    const deletedCategory = await prisma.category.delete({ where: { id } });
+    return new Response(JSON.stringify({ message: 'Category deleted successfully', deletedCategory }), {
+      status: 200,
     });
-
-    return new Response(
-      JSON.stringify({
-        message: `Category '${name}' deleted successfully`,
-        deletedCategory,
-      }),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
   } catch (error) {
     console.error('Error deleting category:', error);
-    return new Response(
-      JSON.stringify({ error: 'Failed to delete category' }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
+    return new Response(JSON.stringify({ error: 'Failed to delete category' }), { status: 500 });
   }
 }
