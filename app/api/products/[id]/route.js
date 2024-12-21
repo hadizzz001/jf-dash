@@ -45,10 +45,7 @@ export async function DELETE(request, { params }) {
   const { id } = params;
 
   try {
-    // Delete related specifications
-    await prisma.specification.deleteMany({
-      where: { productId: id },
-    });
+ 
 
     // Delete the product
     await prisma.product.delete({
