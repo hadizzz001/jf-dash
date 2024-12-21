@@ -207,20 +207,12 @@ else {
         <div key={index} className="flex gap-4 mb-2">
           <input
             type="text"
-            placeholder="Name"
+            placeholder="Value"
             value={spec.name}
             onChange={(e) => handleInputChange(index, 'name', e.target.value)}
             className="flex-1 border p-2"
             required
-          />
-          <input
-            type="text"
-            placeholder="Value"
-            value={spec.value}
-            onChange={(e) => handleInputChange(index, 'value', e.target.value)}
-            className="flex-1 border p-2"
-            required
-          />
+          /> 
         </div>
       ))}
       <button
