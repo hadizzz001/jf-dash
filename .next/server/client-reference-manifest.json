@@ -56,9 +56,9 @@
         "async": false
       }
     },
-    "(app-client)/./app/page.tsx": {
+    "(app-client)/./app/quotation/page.tsx": {
       "*": {
-        "id": "(sc_client)/./app/page.tsx",
+        "id": "(sc_client)/./app/quotation/page.tsx",
         "name": "*",
         "chunks": [],
         "async": false
@@ -75,22 +75,6 @@
     "(app-client)/./app/dashboard/page.tsx": {
       "*": {
         "id": "(sc_client)/./app/dashboard/page.tsx",
-        "name": "*",
-        "chunks": [],
-        "async": false
-      }
-    },
-    "(app-client)/./app/products/page.tsx": {
-      "*": {
-        "id": "(sc_client)/./app/products/page.tsx",
-        "name": "*",
-        "chunks": [],
-        "async": false
-      }
-    },
-    "(app-client)/./node_modules/next/dist/shared/lib/lazy-dynamic/dynamic-no-ssr.js": {
-      "*": {
-        "id": "(sc_client)/./node_modules/next/dist/shared/lib/lazy-dynamic/dynamic-no-ssr.js",
         "name": "*",
         "chunks": [],
         "async": false
@@ -259,11 +243,11 @@
       ],
       "async": false
     },
-    "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\page.tsx": {
-      "id": "(app-client)/./app/page.tsx",
+    "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\quotation\\page.tsx": {
+      "id": "(app-client)/./app/quotation/page.tsx",
       "name": "*",
       "chunks": [
-        "app/page:static/chunks/app/page.js"
+        "app/quotation/page:static/chunks/app/quotation/page.js"
       ],
       "async": false
     },
@@ -282,37 +266,9 @@
         "app/dashboard/page:static/chunks/app/dashboard/page.js"
       ],
       "async": false
-    },
-    "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\products\\page.tsx": {
-      "id": "(app-client)/./app/products/page.tsx",
-      "name": "*",
-      "chunks": [
-        "app/products/page:static/chunks/app/products/page.js"
-      ],
-      "async": false
-    },
-    "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\node_modules\\next\\dist\\shared\\lib\\lazy-dynamic\\dynamic-no-ssr.js": {
-      "id": "(app-client)/./node_modules/next/dist/shared/lib/lazy-dynamic/dynamic-no-ssr.js",
-      "name": "*",
-      "chunks": [
-        "app/products/page:static/chunks/app/products/page.js"
-      ],
-      "async": false
-    },
-    "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\node_modules\\next\\dist\\esm\\shared\\lib\\lazy-dynamic\\dynamic-no-ssr.js": {
-      "id": "(app-client)/./node_modules/next/dist/shared/lib/lazy-dynamic/dynamic-no-ssr.js",
-      "name": "*",
-      "chunks": [
-        "app/products/page:static/chunks/app/products/page.js"
-      ],
-      "async": false
     }
   },
   "entryCSSFiles": {
-    "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\page": {
-      "modules": [],
-      "files": []
-    },
     "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\layout": {
       "modules": [
         "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\globals.css",
@@ -323,6 +279,10 @@
         "static/css/app/layout.css"
       ]
     },
+    "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\quotation\\page": {
+      "modules": [],
+      "files": []
+    },
     "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\dashboard\\layout": {
       "modules": [],
       "files": []
@@ -330,14 +290,6 @@
     "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\dashboard\\page": {
       "modules": [],
       "files": []
-    },
-    "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\app\\products\\page": {
-      "modules": [
-        "C:\\Users\\abc\\Desktop\\Hadi\\My Bussiness\\jf\\jf- dash\\node_modules\\react-quill\\dist\\quill.snow.css"
-      ],
-      "files": [
-        "static/css/app/products/page.css"
-      ]
     }
   }
 }

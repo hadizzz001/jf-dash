@@ -4,12 +4,15 @@ import { useState, useEffect } from 'react';
 
 export default function ProductTable() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
 
-  // Fetch products on load
+  // Fetch products and categories on load
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, []);
 
   const fetchProducts = async () => {
@@ -19,6 +22,16 @@ export default function ProductTable() {
       setProducts(data);
     } else {
       console.error('Failed to fetch products');
+    }
+  };
+
+  const fetchCategories = async () => {
+    const response = await fetch('/api/category');
+    if (response.ok) {
+      const data = await response.json();
+      setCategories(data);
+    } else {
+      console.error('Failed to fetch categories');
     }
   };
 
@@ -64,14 +77,30 @@ export default function ProductTable() {
     }
   };
 
-  // Filter products based on the search query
-  const filteredProducts = products.filter((product) =>
-    product.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filter products by search query
+  const filterBySearch = (product) => {
+    return product.title.toLowerCase().includes(searchQuery.toLowerCase());
+  };
 
+  // Filter products by selected category
+  const filterByCategory = (product) => {
+    const isFilteredByCategory = selectedCategory ? product.category === selectedCategory : true;
+    
+    // Log the filtering process for debugging
+    console.log(`Filtering product: ${product.title} | Category: ${product.category} | Selected Category: ${selectedCategory} | Show: ${isFilteredByCategory}`);
+    
+    return isFilteredByCategory;
+  };
 
-  console.log("prod: ",products);
-  
+  // Apply both search and category filters
+  const filteredProducts = products.filter((product) => {
+    return filterBySearch(product) && filterByCategory(product);
+  });
+
+  // Log the filtered products to check what's being displayed
+  useEffect(() => {
+    console.log("Filtered products:", filteredProducts);
+  }, [filteredProducts]);
 
   return (
     <div className="max-w-6xl mx-auto p-4">
@@ -84,7 +113,7 @@ export default function ProductTable() {
       )}
       <h1 className="text-2xl font-bold mb-4">Product List</h1>
 
-      {/* Search input */}
+      {/* Search Input */}
       <div className="mb-4">
         <input
           type="text"
@@ -95,6 +124,22 @@ export default function ProductTable() {
         />
       </div>
 
+      {/* Category Filter */}
+      <div className="mb-4">
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="w-full border p-2"
+        >
+          <option value="">Select a category</option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.name}>
+              {category.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <table className="table-auto w-full border-collapse border border-gray-200 mb-4">
         <thead>
           <tr className="bg-gray-100">
@@ -102,6 +147,7 @@ export default function ProductTable() {
             <th className="border p-2">Pic</th>
             <th className="border p-2">Price (USD)</th>
             <th className="border p-2">Stock</th>
+            <th className="border p-2">Category</th>
             <th className="border p-2">Actions</th>
           </tr>
         </thead>
@@ -114,6 +160,7 @@ export default function ProductTable() {
               </td>
               <td className="border p-2">{product.price}</td>
               <td className="border p-2">{product.stock}</td>
+              <td className="border p-2">{product.category}</td>
               <td className="border p-2">
                 <button
                   onClick={() => handleEdit(product)}

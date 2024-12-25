@@ -59,6 +59,16 @@ export default function RootLayout({
                 </a>
               </li>
               <li className="nav-item">
+                <a href="/client" className="nav-link text-white">
+                  Add Client
+                </a>
+              </li>
+              <li className="nav-item">
+                <a href="/quotation" className="nav-link text-white">
+                  Add Quotation
+                </a>
+              </li>
+              <li className="nav-item">
                 <a href="/" className="nav-link text-white">
                   logout
                 </a>
