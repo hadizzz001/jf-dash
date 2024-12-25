@@ -1,10 +1,9 @@
-"use client"
-
+"use client";
 
 import { useState, useEffect, useRef } from 'react';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-import html2pdf from 'html2pdf.js';
+import { jsPDF } from 'jspdf';
 
 export default function Quotation() {
   const [products, setProducts] = useState([]);
@@ -22,7 +21,7 @@ export default function Quotation() {
   }, []);
 
   useEffect(() => {
-    const total = quotationItems.reduce((sum, item) => sum + item.price * item.qty, 0);
+    const total = quotationItems.reduce((sum, item) => sum + (Number(item.price) || 0) * item.qty, 0);
     setSubtotal(total);
   }, [quotationItems]);
 
@@ -41,24 +40,49 @@ export default function Quotation() {
   };
 
   const exportPDF = () => {
+    const doc = new jsPDF();
     const element = pdfRef.current;
-    const options = {
-      margin: 1,
-      filename: 'quotation.pdf',
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' },
-    };
+    
+    // Add the logo (adjust the path and size as necessary)
+    doc.addImage('logo1.png', 'PNG', 10, 10, 50, 30);
+    
+    // Add date and title
+    doc.setFontSize(12);
+    doc.text('Date: ' + getFormattedDate(), 160, 20);
+    doc.setFontSize(18);
+    doc.text('Quotation', 14, 40);
 
-    html2pdf().from(element).set(options).save();
+    // Table headers
+    doc.setFontSize(12);
+    doc.text('Title', 14, 60);
+    doc.text('Price', 70, 60);
+    doc.text('Qty', 120, 60);
+    doc.text('Total', 150, 60);
+
+    // Table rows
+    let y = 70;
+    quotationItems.forEach(item => {
+      doc.text(item.title, 14, y);
+      doc.text((Number(item.price) || 0).toFixed(2), 70, y);  {/* Ensure price is a valid number */}
+      doc.text(item.qty.toString(), 120, y);
+      doc.text(((Number(item.price) || 0) * item.qty).toFixed(2), 150, y);  {/* Ensure price is a valid number */}
+      y += 10;
+    });
+
+    // Subtotal
+    doc.setFontSize(14);
+    doc.text('Subtotal: ' + subtotal.toFixed(2), 160, y + 10);
+
+    doc.save('quotation.pdf');
   };
 
   const exportExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(
       quotationItems.map((item) => ({
         Title: item.title,
-        Price: item.price.toFixed(2),
+        Price: (Number(item.price) || 0).toFixed(2),  // Ensure price is a valid number
         Qty: item.qty,
-        Total: (item.price * item.qty).toFixed(2),
+        Total: ((Number(item.price) || 0) * item.qty).toFixed(2),  // Ensure price is a valid number
       }))
     );
     const workbook = XLSX.utils.book_new();
@@ -125,7 +149,7 @@ export default function Quotation() {
                   </select>
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
-                  {Number(item.price || 0).toFixed(2)}
+                  {(Number(item.price) || 0).toFixed(2)} {/* Ensure price is a valid number */}
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
                   <input
@@ -136,7 +160,7 @@ export default function Quotation() {
                   />
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
-                  {(Number(item.price || 0) * item.qty).toFixed(2)}
+                  {((Number(item.price) || 0) * item.qty).toFixed(2)} {/* Ensure price is a valid number */}
                 </td>
               </tr>
             ))}
@@ -161,4 +185,3 @@ export default function Quotation() {
     </div>
   );
 }
-

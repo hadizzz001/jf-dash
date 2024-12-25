@@ -1,0 +1,17 @@
+{
+  "/page": "/",
+  "/category/page": "/category",
+  "/client/page": "/client",
+  "/login/page": "/login",
+  "/quotation/page": "/quotation",
+  "/products/page": "/products",
+  "/api/category/route": "/api/category",
+  "/api/clients/route": "/api/clients",
+  "/api/products/route": "/api/products",
+  "/dashboard/page": "/dashboard",
+  "/api/auth/login/route": "/api/auth/login",
+  "/api/category/[type]/route": "/api/category/[type]",
+  "/api/auth/me/route": "/api/auth/me",
+  "/api/products/[id]/route": "/api/products/[id]",
+  "/favicon.ico/route": "/favicon.ico"
+}
