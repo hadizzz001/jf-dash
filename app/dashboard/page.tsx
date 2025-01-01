@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Dropzone from '../components/Dropzone';
 
 export default function ProductTable() {
   const [products, setProducts] = useState([]);
@@ -8,6 +9,7 @@ export default function ProductTable() {
   const [editingProduct, setEditingProduct] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [img, setImg] = useState(['']);
 
   // Fetch products and categories on load
   useEffect(() => {
@@ -102,6 +104,9 @@ export default function ProductTable() {
     console.log("Filtered products:", filteredProducts);
   }, [filteredProducts]);
 
+
+
+
   return (
     <div className="max-w-6xl mx-auto p-4">
       {editingProduct && (
@@ -191,6 +196,7 @@ function EditProductForm({ product, onCancel, onSave }) {
   const [shipping, setShipping] = useState(product.shipping || '');
   const [sku, setSku] = useState(product.sku || '');
   const [videoLink, setVideoLink] = useState(product.videoLink || '');
+  const [img, setImg] = useState(product.img || []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -203,8 +209,17 @@ function EditProductForm({ product, onCancel, onSave }) {
       shipping,
       sku,
       videoLink,
+      img
     });
   };
+
+
+  const handleImgChange = (url) => {
+    if (url) {
+      setImg(url);
+    }
+  }
+  
 
   return (
     <form onSubmit={handleSubmit} className="border p-4 bg-gray-100 rounded">
@@ -296,6 +311,14 @@ function EditProductForm({ product, onCancel, onSave }) {
           placeholder="Video Link"
         />
       </div>
+
+      <style
+        dangerouslySetInnerHTML={{
+          __html:
+            "\n  .uploadcare--widget {\n    background:black;\n  }\n  "
+        }}
+      />
+      <Dropzone defaultValue={img} HandleImagesChange={handleImgChange} />
 
       <div className="flex gap-2">
         <button type="submit" className="bg-green-500 text-white px-4 py-2">
