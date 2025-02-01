@@ -13,6 +13,8 @@ export async function PATCH(request, { params }) {
     price,
     stock,
     videoLink, 
+    specifications, 
+    description, 
     img
   } = await request.json();
 
@@ -28,6 +30,8 @@ export async function PATCH(request, { params }) {
         price,
         stock,
         videoLink, 
+        specifications, 
+        description, 
         img
       },
     });

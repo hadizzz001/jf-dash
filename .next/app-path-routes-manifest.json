@@ -1,0 +1,18 @@
+{
+  "/favicon.ico/route": "/favicon.ico",
+  "/page": "/",
+  "/category/page": "/category",
+  "/client/page": "/client",
+  "/login/page": "/login",
+  "/quotation/page": "/quotation",
+  "/api/category/route": "/api/category",
+  "/api/clients/route": "/api/clients",
+  "/api/products/route": "/api/products",
+  "/api/proxy/route": "/api/proxy",
+  "/dashboard/page": "/dashboard",
+  "/api/auth/login/route": "/api/auth/login",
+  "/api/auth/me/route": "/api/auth/me",
+  "/api/category/[type]/route": "/api/category/[type]",
+  "/api/products/[id]/route": "/api/products/[id]",
+  "/products/page": "/products"
+}

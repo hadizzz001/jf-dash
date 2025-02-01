@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
@@ -12,7 +12,7 @@ export default function AddProduct() {
   const [weight, setWeight] = useState('');
   const [shipping, setShipping] = useState('');
   const [description, setDescription] = useState(''); // Rich text content
-  const [specifications, setSpecifications] = useState([{ name: '', value: '' }]);
+  const [specifications, setSpecifications] = useState(''); // Rich text for specifications
   const [sku, setSku] = useState('');
   const [price, setPrice] = useState('');
   const [stock, setStock] = useState('');
@@ -41,52 +41,40 @@ export default function AddProduct() {
     fetchCategories();
   }, [type]);
 
-  const handleAddRow = () => {
-    setSpecifications([...specifications, { name: '', value: '' }]);
-  };
-
-  const handleInputChange = (index, field, value) => {
-    const updatedSpecs = [...specifications];
-    updatedSpecs[index][field] = value;
-    setSpecifications(updatedSpecs);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault(); 
     
-if (img.length === 1 && img[0] === '') {
-  alert('Please choose atleast 1 image');
-}
+    if (img.length === 1 && img[0] === '') {
+      alert('Please choose at least 1 image');
+    } else {
+      const payload = {
+        title,
+        weight,
+        shipping,
+        description,
+        specifications, // Now rich text
+        sku,
+        price,
+        stock,
+        videoLink,
+        img,
+        type,
+        category: selectedCategory,
+      };
 
-else {
-  const payload = {
-    title,
-    weight,
-    shipping,
-    description,
-    specifications,
-    sku,
-    price,
-    stock,
-    videoLink,
-    img,
-    type,
-    category: selectedCategory,
-  };
+      const response = await fetch('/api/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
 
-  const response = await fetch('/api/products', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
-
-  if (response.ok) {
-    alert('Product added successfully!');
-    window.location.href = '/dashboard';
-  } else {
-    alert('Failed to add product');
-  }
-}
+      if (response.ok) {
+        alert('Product added successfully!');
+        window.location.href = '/dashboard';
+      } else {
+        alert('Failed to add product');
+      }
+    }
   };
 
   const handleImgChange = (url) => {
@@ -195,34 +183,22 @@ else {
         placeholder="Write your product description here..."
       />
 
-<style
+      {/* Specifications as rich text */}
+      <label className="block text-lg font-bold mb-2">Specifications</label>
+      <ReactQuill
+        value={specifications}
+        onChange={setSpecifications} // Set specifications as rich text
+        className="mb-4"
+        theme="snow"
+        placeholder="Enter specifications here..."
+      />
+
+      <style
         dangerouslySetInnerHTML={{
-          __html:
-            "\n  .uploadcare--widget {\n    background:black;\n  }\n  "
+          __html: "\n  .uploadcare--widget {\n    background:black;\n  }\n  "
         }}
       />
       <Dropzone HandleImagesChange={handleImgChange} />
-      <h2 className="text-lg font-bold mb-2">Specifications</h2>
-      {specifications.map((spec, index) => (
-        <div key={index} className="flex gap-4 mb-2">
-          <input
-            type="text"
-            placeholder="Value"
-            value={spec.name}
-            onChange={(e) => handleInputChange(index, 'name', e.target.value)}
-            className="flex-1 border p-2"
-            required
-          /> 
-        </div>
-      ))}
-      <button
-        type="button"
-        onClick={handleAddRow}
-        style={{ fontSize: '20px' }}
-        className="bg-blue-500 text-white px-3 py-1 mb-4 flex"
-      >
-        +
-      </button>
       <button type="submit" className="bg-green-500 text-white px-4 py-2">
         Save Product
       </button>

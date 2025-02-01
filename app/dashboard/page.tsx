@@ -2,6 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import Dropzone from '../components/Dropzone';
+import dynamic from 'next/dynamic';
+import 'react-quill/dist/quill.snow.css'; 
+
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 export default function ProductTable() {
   const [products, setProducts] = useState([]);
@@ -161,7 +165,8 @@ export default function ProductTable() {
             <tr key={product.id} className="hover:bg-gray-50">
               <td className="border p-2">{product.title}</td>
               <td className="border p-2">
-                <img src={product.img[0]} alt="Product Image" className="w-24 h-auto" />
+              <img src={`api/proxy?url=${product.img[0]}`} alt="Product Image" className="w-24 h-auto" />
+
               </td>
               <td className="border p-2">{product.price}</td>
               <td className="border p-2">{product.stock}</td>
@@ -197,6 +202,8 @@ function EditProductForm({ product, onCancel, onSave }) {
   const [sku, setSku] = useState(product.sku || '');
   const [videoLink, setVideoLink] = useState(product.videoLink || '');
   const [img, setImg] = useState(product.img || []);
+  const [description, setDescription] = useState(product.description || '');
+  const [specifications, setSpecifications] = useState(product.specifications || '');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -209,17 +216,17 @@ function EditProductForm({ product, onCancel, onSave }) {
       shipping,
       sku,
       videoLink,
-      img
+      img,
+      description,
+      specifications
     });
   };
-
 
   const handleImgChange = (url) => {
     if (url) {
       setImg(url);
     }
-  }
-  
+  };
 
   return (
     <form onSubmit={handleSubmit} className="border p-4 bg-gray-100 rounded">
@@ -309,6 +316,28 @@ function EditProductForm({ product, onCancel, onSave }) {
           onChange={(e) => setVideoLink(e.target.value)}
           className="w-full border p-2"
           placeholder="Video Link"
+        />
+      </div>
+
+      {/* React Quill for description */}
+      <div className="mb-4">
+        <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
+        <ReactQuill
+          value={description}
+          onChange={setDescription}
+          className="w-full border p-2"
+          placeholder="Product description"
+        />
+      </div>
+
+      {/* React Quill for specifications */}
+      <div className="mb-4">
+        <label htmlFor="specifications" className="block text-sm font-medium text-gray-700">Specifications</label>
+        <ReactQuill
+          value={specifications}
+          onChange={setSpecifications}
+          className="w-full border p-2"
+          placeholder="Product specifications"
         />
       </div>
 
